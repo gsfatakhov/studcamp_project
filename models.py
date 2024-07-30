@@ -29,12 +29,12 @@ class GNNTEP(nn.Module):
 
         if constant_adj_matrix is not None:
             self.constant_adj_matrix = torch.tensor(constant_adj_matrix, device=device, dtype=torch.float32)
-        else:
-            self.constant_adj_matrix = torch.eye(nnodes, device=device, dtype=torch.float32)
+        # else:
+        #     self.constant_adj_matrix = torch.zeros((nnodes, nnodes), device=device, dtype=torch.float32)
 
         for i in range(self.ngnn):
             if gsllayer == 'relu':
-                self.graph_struct.append(Graph_ReLu_W(nnodes, device))
+                self.graph_struct.append(Graph_ReLu_W(nnodes, k, device, self.constant_adj_matrix))
             elif gsllayer == 'directed':
                 self.graph_struct.append(Graph_Directed_A(nnodes, window_size, alpha, k, device))
             elif gsllayer == 'unidirected':
