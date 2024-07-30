@@ -20,13 +20,17 @@ class GCNLayer(nn.Module):
 
 # A = ReLu(W)    
 class Graph_ReLu_W(nn.Module):
-    def __init__(self, num_nodes, k, device):
-        super(Graph_Relu_W, self).__init__()
+    def __init__(self, num_nodes, k, device, constant_adj_matrix=None):
+        super(Graph_ReLu_W, self).__init__()
         self.num_nodes = num_nodes
         self.k = k
+        self.constant_adj_matrix = constant_adj_matrix
 
-        self.A = nn.Parameter(torch.randn(num_nodes, num_nodes).to(device), requires_grad=True).to(device)
-
+        if self.constant_adj_matrix is not None:
+            self.A = nn.Parameter(torch.tensor(self.constant_adj_matrix).to(device), requires_grad=True).to(device)
+        else:
+            self.A = nn.Parameter(torch.randn(num_nodes, num_nodes).to(device), requires_grad=True).to(device)
+    
     def forward(self, idx):
         adj = F.relu(self.A)
 
@@ -129,8 +133,8 @@ class Graph_Undirected_A(nn.Module):
 
 
 class ConstantGraph(nn.Module):
-    def init(self, constant_adj_matrix):
-        super(ConstantGraph, self).init()
+    def __init__(self, constant_adj_matrix):
+        super(ConstantGraph, self).__init__()
         self.constant_adj_matrix = constant_adj_matrix
 
     def forward(self, idx):
