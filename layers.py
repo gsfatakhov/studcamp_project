@@ -129,8 +129,8 @@ class Graph_Undirected_A(nn.Module):
 
 
 class ConstantGraph(nn.Module):
-    def init(self, constant_adj_matrix):
-        super(ConstantGraph, self).init()
+    def __init__(self, constant_adj_matrix):
+        super(ConstantGraph, self).__init__()
         self.constant_adj_matrix = constant_adj_matrix
 
     def forward(self, idx):
